@@ -1,0 +1,39 @@
+{:pom
+ {:group-id "org.danielsz",
+  :artifact-id "golem",
+  :version "0.0.1",
+  :name "golem"},
+ :packaging
+ {:uberjar
+  {:enabled true,
+   :main-class "main.core",
+   :remote-repository
+   {:id "ssh-repository",
+    :url "scpexe://user@domain:/home/.m2/repository"},
+   :excludes
+   {:artifacts ["org.clojure:google-closure-library"],
+    :filters
+    ["META-INF/*.MF"
+     "META-INF/*.SF"
+     "META-INF/*.DSA"
+     "META-INF/*.RSA"]}},
+  :jar
+  {:enabled false,
+   :remote-repository
+   {:id "clojars", :url "https://clojars.org/repo"}}},
+ :cljs
+ {:enabled false,
+  :compiler-opts
+  {:infer-externs true,
+   :output-dir "resources/js/compiled",
+   :optimizations :advanced,
+   :parallel-build true,
+   :aot-cache true,
+   :output-to "resources/js/main.js",
+   :output-wrapper true,
+   :source-map "resources/js/main.js.map",
+   :main "main.core"},
+  :tools-deps-alias :cljs},
+ :testing {:enabled true, :tools-deps-alias :test},
+ :scm {:enabled false},
+ :interactive {:enabled true, :tools-deps-alias :repl}}
