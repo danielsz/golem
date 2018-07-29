@@ -1,6 +1,8 @@
 (ns golem.core
   (:require [lang-utils.core :refer [seek]]))
 
+;; FSM with accumulator
+
 (defn state-machine [table init-state acc]
   {:table table
    :state (atom init-state)
@@ -13,14 +15,12 @@
 (defn update-state [sm]
   (let [xs (get (:table sm) @(:state sm))
         state (find-first xs @(:acc sm))]
-    (if state
-      (do
-        (doseq [f (:actions state)]
-          (reset! (:acc sm) (f @(:acc sm)))) ;maybe juxt
-        (reset! (:state sm) (:next-state state)))
-      @(:acc sm))))
+    (do
+      (doseq [f (:actions state)]
+        (reset! (:acc sm) (f @(:acc sm)))) ;maybe juxt
+      (when-let [next-state (:next-state state)]
+        (reset! (:state sm) next-state)))))
 
-(#_
- (if (:target state)
-   @(:acc sm)
-   (recur sm (:next-state state))))
+(defn target-state [sm]
+  (loop [x (update-state sm)]
+    (when x (recur (update-state sm)))))
