@@ -1,8 +1,10 @@
 (ns golem.stack
-  (:require [lang-utils.core :refer [seek]]))
+  (:require
+   [golem.domain :as domain :refer [validate]]
+   [lang-utils.core :refer [seek]]))
 
 (defn state-machine [table init-state]
-  {:table table
+  {:table (validate ::domain/state-table table)
    :state (atom (list init-state))})
 
 (defn find-first [xs]
@@ -13,7 +15,7 @@
   (let [key (peek @(:state sm))
         xs (get (:table sm) key)
         state (find-first xs)]
-    (add-watch (:state sm) key (fn [k r os ns] ((:cb state))))
+    (add-watch (:state sm) key (fn [k r os ns] ((:side-effect state))))
     (if state
       (do
         (swap! (:state sm) conj (:next-state state))

@@ -3,9 +3,9 @@
             [clojure.test :refer [deftest is]]))
 
 (def traffic-light
-  {:green [{:valid-when [] :cb #(println "green") :next-state :yellow}]
-   :yellow [{:valid-when [] :cb #(println "yellow") :next-state :red}]
-   :red [{:valid-when [] :cb #(println "red") :next-state :green}]})
+  {:green [{:valid-when [] :side-effect #(println "green") :next-state :yellow}]
+   :yellow [{:valid-when [] :side-effect #(println "yellow") :next-state :red}]
+   :red [{:valid-when [] :side-effect #(println "red") :next-state :green}]})
 
 (deftest traffic-lights
   (let [foo (state-machine traffic-light :green)]
