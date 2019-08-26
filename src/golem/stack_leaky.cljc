@@ -21,5 +21,3 @@
         (swap! (:state sm) conj (:next-state state))
         (remove-watch (:state sm) key))
       sm)))
-
-

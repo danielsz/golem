@@ -16,8 +16,12 @@
         xs (get (:table sm) key)
         state (find-first xs)]
     (add-watch (:state sm) key (fn [k r os ns] ((:side-effect state))))
-    (if state
-      (do
-        (swap! (:state sm) conj (:next-state state))
-        (remove-watch (:state sm) key))
-      sm)))
+    (if (:next-state state)
+      (do (swap! (:state sm) conj (:next-state state))
+          (remove-watch (:state sm) key))
+      (do ((:side-effect state))
+          nil))))
+
+(defn target-state [sm]
+  (loop [x (update-state sm)]
+    (when x (recur (update-state sm)))))
