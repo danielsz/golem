@@ -1,5 +1,5 @@
 (ns golem.higher-order-test
-  (:require [golem.higher-order :refer [fsm]]
+  (:require [golem.higher-order :refer [fsm fsm-driver]]
             #?(:clj [clojure.test :as t :refer [deftest is]]
                :cljs [cljs.test :as t :include-macros true])))
 
